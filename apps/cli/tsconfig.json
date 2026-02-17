@@ -1,0 +1,14 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "ESNext",
+		"resolveJsonModule": true,
+		"types": [
+			"bun"
+		]
+	},
+	"include": [
+		"src/**/*.ts"
+	]
+}

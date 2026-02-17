@@ -1,0 +1,17 @@
+[install]
+# Enforce strict dependency boundaries between workspaces
+linker = "isolated"
+# Always use the lockfile
+frozenLockfile = false
+
+# Avoid postinstall surprises unless explicitly allowed
+auto = "auto"
+
+# Faster, deterministic installs
+cache = true
+
+# Prefer exact versions for reproducibility
+exact = true
+
+# Fail fast on dependency resolution issues
+peer = true

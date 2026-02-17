@@ -1,0 +1,31 @@
+node_modules
+dist
+build
+.output
+.vinxi
+.nitro
+*.lockb
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Prisma
+src/generated
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+.turbo
+.agent
