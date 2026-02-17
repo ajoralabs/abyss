@@ -1,15 +1,20 @@
 {
 	"name": "voidflux",
 	"version": "0.0.1",
-	"private": true,
+	"devDependencies": {
+		"@biomejs/biome": "2.4.2",
+		"@changesets/cli": "2.29.8",
+		"@commitlint/cli": "20.4.1",
+		"@commitlint/config-conventional": "20.4.1",
+		"husky": "9.1.7",
+		"turbo": "2.8.9"
+	},
 	"engines": {
-		"node": "22.x"
+		"node": ">=22",
+		"bun": ">=1.3.5"
 	},
 	"packageManager": "bun@1.3.5",
-	"workspaces": [
-		"apps/*",
-		"packages/*"
-	],
+	"private": true,
 	"scripts": {
 		"dev": "turbo dev --ui tui",
 		"dev:web": "turbo dev --filter=@voidflux/web  --ui tui",
@@ -25,13 +30,8 @@
 		"direct": "echo 'nothing'",
 		"prepare": "husky"
 	},
-	"devDependencies": {
-		"@biomejs/biome": "^2.4.0",
-		"@changesets/cli": "2.29.8",
-		"@commitlint/cli": "20.4.1",
-		"@commitlint/config-conventional": "20.4.1",
-		"babel-plugin-react-compiler": "1.0.0",
-		"husky": "9.1.7",
-		"turbo": "^2.4.4"
-	}
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	]
 }
