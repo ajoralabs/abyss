@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
-			"@voidflux/core/*": [
+			"@abysslabs/core/*": [
 				"./src/*"
 			]
 		}

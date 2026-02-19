@@ -80,7 +80,7 @@
     --font-body: 'Manrope', sans-serif;
     --font-mono: 'JetBrains Mono Variable', monospace;
 
-    /* VoidFlux Abyss palette */
+    /* Abyss palette */
     --color-abyss-950: #0a0f1c;
     --color-abyss-900: #111827;
     --color-abyss-800: #1f2937;
@@ -130,12 +130,15 @@
     --radius-3xl: calc(var(--radius) + 12px);
     --radius-4xl: calc(var(--radius) + 16px);
 
-    /* VoidFlux animations */
+    /* Abyss animations */
     @keyframes breathe {
-        0%, 100% {
+
+        0%,
+        100% {
             box-shadow: 0 0 20px -5px var(--color-neon-cyan-dim);
             border-color: rgba(0, 240, 255, 0.3);
         }
+
         50% {
             box-shadow: 0 0 30px -2px var(--color-neon-cyan-dim);
             border-color: rgba(0, 240, 255, 0.6);
@@ -143,21 +146,49 @@
     }
 
     @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
     }
 
     @keyframes aurora-shift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
     }
 
     @keyframes scan {
-        0% { top: 0%; opacity: 0; }
-        10% { opacity: 1; }
-        90% { opacity: 1; }
-        100% { top: 100%; opacity: 0; }
+        0% {
+            top: 0%;
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            top: 100%;
+            opacity: 0;
+        }
     }
 
     --animate-breathe: breathe 4s infinite ease-in-out;
@@ -174,6 +205,7 @@
     * {
         @apply border-border outline-ring/50;
     }
+
     body {
         @apply font-sans bg-background text-foreground;
         background-color: var(--color-abyss-950);
@@ -182,10 +214,17 @@
         overflow-x: hidden;
         -webkit-font-smoothing: antialiased;
     }
+
     html {
         @apply font-sans;
     }
-    h1, h2, h3, h4, h5, h6 {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
         font-family: var(--font-brand);
     }
 }

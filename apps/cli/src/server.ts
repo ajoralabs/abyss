@@ -1,12 +1,24 @@
-import { resolve } from 'node:path';
+import {
+	existsSync,
+	mkdirSync,
+	readFileSync,
+	type Stats,
+	writeFileSync,
+} from 'node:fs';
+import { readFile, stat } from 'node:fs/promises';
+import type { RequestListener } from 'node:http';
 import { homedir } from 'node:os';
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { eventHandler, H3, type H3Event, HTTPError, readBody } from 'h3';
+import { toNodeHandler } from 'h3/node';
+import { listen } from 'listhen';
+import { lookup } from 'mime-types';
 
 const DEFAULT_PORT = 4567;
 
 // ─── Workspace Persistence ──────────────────────────
 
-const WORKSPACE_DIR = resolve(homedir(), '.voidflux');
+const WORKSPACE_DIR = resolve(homedir(), '.abyss');
 const WORKSPACE_FILE = resolve(WORKSPACE_DIR, 'workspace.json');
 
 function ensureWorkspaceDir(): void {
@@ -35,81 +47,125 @@ function writeWorkspace(data: unknown): void {
 
 // ─── Server ─────────────────────────────────────────
 
-const CORS_HEADERS = {
-	'Access-Control-Allow-Origin': '*',
-	'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
-	'Access-Control-Allow-Headers': 'Content-Type',
-};
-
 export async function startServer(
 	port = DEFAULT_PORT,
 ): Promise<{ url: string; stop: () => void }> {
-	const webDistPath = resolve(import.meta.dir, '../../gui/dist');
+	const devPath = resolve(import.meta.dirname || __dirname, '../../gui/dist');
+	const prodPath = resolve(import.meta.dirname || __dirname, '../client');
 
-	const server = Bun.serve({
-		port,
-		hostname: '127.0.0.1', // Security: Bind to localhost only to prevent external network access
-		async fetch(request) {
-			const url = new URL(request.url);
+	const webDistPath = existsSync(resolve(prodPath, 'index.html'))
+		? prodPath
+		: devPath;
 
-			// CORS preflight
-			if (request.method === 'OPTIONS') {
-				return new Response(null, { status: 204, headers: CORS_HEADERS });
+	const app = new H3();
+
+	// CORS Preflight
+	app.use(
+		eventHandler((event) => {
+			if (event.req.method === 'OPTIONS') {
+				event.res.headers.set('Access-Control-Allow-Origin', '*');
+				event.res.headers.set(
+					'Access-Control-Allow-Methods',
+					'GET, POST, PUT, OPTIONS',
+				);
+				event.res.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+				return null;
 			}
+		}),
+	);
 
-			// ─── API Routes ─────────────────────────
+	// ─── API Routes ─────────────────────────
 
-			// Proxy endpoint — forwards requests to avoid CORS
-			if (url.pathname === '/api/proxy' && request.method === 'POST') {
-				return handleProxy(request);
+	// Proxy endpoint
+	app.use(
+		'/api/proxy',
+		eventHandler(async (event) => {
+			// Set CORS headers for the response
+			event.res.headers.set('Access-Control-Allow-Origin', '*');
+
+			if (event.req.method === 'POST') {
+				return handleProxy(event);
 			}
+		}),
+	);
 
-			// Workspace state — read
-			if (url.pathname === '/api/workspace' && request.method === 'GET') {
+	// Workspace state — read/write
+	app.use(
+		'/api/workspace',
+		eventHandler(async (event) => {
+			event.res.headers.set('Access-Control-Allow-Origin', '*');
+
+			if (event.req.method === 'GET') {
 				const data = readWorkspace();
-				return Response.json(data ?? {}, { headers: CORS_HEADERS });
+				return data ?? {};
 			}
 
-			// Workspace state — write
-			if (url.pathname === '/api/workspace' && request.method === 'PUT') {
+			if (event.req.method === 'PUT') {
 				try {
-					const body = await request.json();
+					const body = await readBody(event);
 					writeWorkspace(body);
-					return Response.json({ ok: true }, { headers: CORS_HEADERS });
+					return { ok: true };
 				} catch (err) {
 					const message =
 						err instanceof Error ? err.message : 'Failed to save workspace';
-					return Response.json(
-						{ error: message },
-						{ status: 400, headers: CORS_HEADERS },
-					);
+					throw new HTTPError({
+						statusCode: 400,
+						message,
+					});
+				}
+			}
+		}),
+	);
+
+	// ─── Static Files ───────────────────────
+
+	app.use(
+		eventHandler(async (event) => {
+			// Skip if already handled (API routes)
+			if (event.path.startsWith('/api/')) return;
+
+			const filePath = event.path === '/' ? '/index.html' : event.path;
+			let fullPath = resolve(webDistPath, `.${filePath}`);
+
+			// Prevent directory traversal
+			if (!fullPath.startsWith(webDistPath)) {
+				throw new HTTPError({ statusCode: 403, message: 'Forbidden' });
+			}
+
+			let stats: Stats;
+			try {
+				stats = await stat(fullPath);
+			} catch {
+				// If file doesn't exist, fall back to SPA index.html
+				fullPath = resolve(webDistPath, 'index.html');
+				try {
+					stats = await stat(fullPath);
+				} catch {
+					throw new HTTPError({ statusCode: 404, message: 'Not Found' });
 				}
 			}
 
-			// ─── Static Files ───────────────────────
-
-			const filePath = url.pathname === '/' ? '/index.html' : url.pathname;
-
-			const file = Bun.file(resolve(webDistPath, `.${filePath}`));
-			if (await file.exists()) {
-				return new Response(file);
+			if (stats.isDirectory()) {
+				throw new HTTPError({ statusCode: 403, message: 'Forbidden' });
 			}
 
-			// SPA fallback
-			const indexFile = Bun.file(resolve(webDistPath, 'index.html'));
-			if (await indexFile.exists()) {
-				return new Response(indexFile);
-			}
+			const mimeType = lookup(fullPath) || 'application/octet-stream';
+			event.res.headers.set('Content-Type', mimeType);
 
-			return new Response('Not Found', { status: 404 });
-		},
+			const fileStream = await readFile(fullPath); // Simple read for now
+			return fileStream;
+		}),
+	);
+
+	const listener = await listen(toNodeHandler(app) as RequestListener, {
+		port,
+		hostname: '127.0.0.1',
+		showURL: false,
 	});
 
-	const serverUrl = `http://localhost:${server.port}`;
-
 	return {
-		url: serverUrl,
-		stop: () => server.stop(),
+		url: listener.url,
+		stop: () => listener.close(),
 	};
 }
 
@@ -120,15 +176,25 @@ interface ProxyRequestBody {
 	body?: string;
 }
 
-async function handleProxy(request: Request): Promise<Response> {
+interface ProxyResponse {
+	status: number;
+	statusText: string;
+	headers: Record<string, string>;
+	body: string;
+	latencyMs: number;
+	size: number;
+	error?: string;
+}
+
+async function handleProxy(event: H3Event): Promise<ProxyResponse> {
 	try {
-		const payload = (await request.json()) as ProxyRequestBody;
+		const payload = (await readBody(event)) as ProxyRequestBody;
 
 		if (!payload.url) {
-			return Response.json(
-				{ error: 'Missing required field: url' },
-				{ status: 400 },
-			);
+			throw new HTTPError({
+				statusCode: 400,
+				message: 'Missing required field: url',
+			});
 		}
 
 		// Validate URL format and protocol
@@ -136,33 +202,27 @@ async function handleProxy(request: Request): Promise<Response> {
 		try {
 			parsedUrl = new URL(payload.url);
 		} catch {
-			return Response.json(
-				{
-					status: 0,
-					statusText: 'Invalid URL',
-					headers: {},
-					body: '',
-					latencyMs: 0,
-					size: 0,
-					error: `Invalid URL: ${payload.url}`,
-				},
-				{ status: 200, headers: { 'Access-Control-Allow-Origin': '*' } },
-			);
+			return {
+				status: 0,
+				statusText: 'Invalid URL',
+				headers: {},
+				body: '',
+				latencyMs: 0,
+				size: 0,
+				error: `Invalid URL: ${payload.url}`,
+			};
 		}
 
 		if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
-			return Response.json(
-				{
-					status: 0,
-					statusText: 'Invalid Protocol',
-					headers: {},
-					body: '',
-					latencyMs: 0,
-					size: 0,
-					error: `Only HTTP and HTTPS are supported, got: ${parsedUrl.protocol}`,
-				},
-				{ status: 200, headers: { 'Access-Control-Allow-Origin': '*' } },
-			);
+			return {
+				status: 0,
+				statusText: 'Invalid Protocol',
+				headers: {},
+				body: '',
+				latencyMs: 0,
+				size: 0,
+				error: `Only HTTP and HTTPS are supported, got: ${parsedUrl.protocol}`,
+			};
 		}
 
 		const startTime = performance.now();
@@ -189,7 +249,7 @@ async function handleProxy(request: Request): Promise<Response> {
 			responseHeaders[key] = value;
 		});
 
-		const result = {
+		return {
 			status: proxyResponse.status,
 			statusText: proxyResponse.statusText,
 			headers: responseHeaders,
@@ -197,28 +257,16 @@ async function handleProxy(request: Request): Promise<Response> {
 			latencyMs,
 			size: new TextEncoder().encode(responseBody).length,
 		};
-
-		return Response.json(result, {
-			headers: {
-				'Access-Control-Allow-Origin': '*',
-			},
-		});
 	} catch (err) {
 		const message = err instanceof Error ? err.message : 'Unknown proxy error';
-		return Response.json(
-			{
-				status: 0,
-				statusText: 'Network Error',
-				headers: {},
-				body: '',
-				latencyMs: 0,
-				size: 0,
-				error: message,
-			},
-			{
-				status: 200,
-				headers: { 'Access-Control-Allow-Origin': '*' },
-			},
-		);
+		return {
+			status: 0,
+			statusText: 'Network Error',
+			headers: {},
+			body: '',
+			latencyMs: 0,
+			size: 0,
+			error: message,
+		};
 	}
 }

@@ -1,6 +1,6 @@
-# VoidFlux GUI
+# Abyss GUI
 
-The VoidFlux GUI is a cutting-edge, local-first API client designed for minimal friction and maximum productivity. It runs entirely in your browser but leverages a local CLI proxy to bypass CORS and access local networks.
+The Abyss GUI is a cutting-edge, local-first API client designed for minimal friction and maximum productivity. It runs entirely in your browser but leverages a local CLI proxy to bypass CORS and access local networks.
 
 ## ✨ Key Features
 
@@ -8,7 +8,7 @@ The VoidFlux GUI is a cutting-edge, local-first API client designed for minimal 
 - **📱 Fully Responsive**: Seamlessly adapts from desktop split-view to mobile stacked-view, perfect for testing on any device.
 - **💾 Local-First Persistence**: All your history, collections, and settings are stored locally in your browser. No cloud, no login required.
 - **⚡️ Fast & Lightweight**: Built with Vite + React + Tailwind for blazing fast load times and interactions.
-- **🛡 Secure Design**: Utilizes a local CLI proxy (`@voidflux/cli`) to securely handle requests without exposing credentials to the cloud.
+- **🛡 Secure Design**: Utilizes a local CLI proxy (`@abysslabs/cli`) to securely handle requests without exposing credentials to the cloud.
 
 ## 🛠 Tech Stack
 

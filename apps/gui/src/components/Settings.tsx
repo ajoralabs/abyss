@@ -99,7 +99,7 @@ export function Settings() {
 									</p>
 								</div>
 								<code className="font-mono text-xs text-neon-cyan bg-white/5 px-3 py-1.5 rounded-lg">
-									~/.voidflux/workspace.json
+									~/.abyss/workspace.json
 								</code>
 							</div>
 

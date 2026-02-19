@@ -689,7 +689,7 @@ export function RequestProvider({ children }: { children: ReactNode }) {
 	const isHydratedRef = useRef(false);
 	stateRef.current = state;
 
-	// On mount: load workspace from server (~/.voidflux/workspace.json)
+	// On mount: load workspace from server (~/.abyss/workspace.json)
 	useEffect(() => {
 		let cancelled = false;
 

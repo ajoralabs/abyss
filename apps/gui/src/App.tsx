@@ -59,11 +59,11 @@ function Layout() {
 				<div className="p-4 flex items-center gap-3 border-b border-white/5">
 					<img
 						src="/logo.png"
-						alt="VoidFlux"
+						alt="Abyss"
 						className="w-8 h-8 object-contain rounded-lg shadow-[0_0_15px_rgba(0,240,255,0.3)] mix-blend-screen"
 					/>
 					<span className="font-brand font-bold text-lg tracking-tight hidden lg:block bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-						VoidFlux
+						Abyss
 					</span>
 				</div>
 

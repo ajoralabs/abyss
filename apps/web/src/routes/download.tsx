@@ -1,81 +1,88 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/download')({
-  component: DownloadPage,
+	component: DownloadPage,
 });
 
 function DownloadPage() {
-  return (
-    <div className="download-page">
-      <section className="download-hero">
-        <div className="container">
-          <h1 className="page-title">
-            Install <span className="text-gradient">VoidFlux</span>
-          </h1>
-          <p className="page-description">
-            Run the void on any platform. CLI-first, desktop-ready.
-          </p>
-        </div>
-      </section>
+	return (
+		<div className="download-page">
+			<section className="download-hero">
+				<div className="container">
+					<h1 className="page-title">
+						Install <span className="text-gradient">Abyss</span>
+					</h1>
+					<p className="page-description">
+						Run the void on any platform. CLI-first, desktop-ready.
+					</p>
+				</div>
+			</section>
 
-      <section className="download-options section">
-        <div className="container">
-          <div className="download-cards">
-            {/* CLI Card - Primary */}
-            <div className="download-card primary">
-              <div className="card-badge">Start Here</div>
-              <div className="os-icon">⚡</div>
-              <h2>VoidFlux CLI</h2>
-              <p className="version">Latest (v0.x)</p>
-              <p className="requirements">Works on macOS, Windows, Linux, & CI/CD</p>
+			<section className="download-options section">
+				<div className="container">
+					<div className="download-cards">
+						{/* CLI Card - Primary */}
+						<div className="download-card primary">
+							<div className="card-badge">Start Here</div>
+							<div className="os-icon">⚡</div>
+							<h2>Abyss CLI</h2>
+							<p className="version">Latest (v0.x)</p>
+							<p className="requirements">
+								Works on macOS, Windows, Linux, & CI/CD
+							</p>
 
-              <div className="cli-install-block">
-                <code className="cli-command">npm install -g @voidflux/cli</code>
-                <span className="cli-copy">Run in terminal</span>
-              </div>
+							<div className="cli-install-block">
+								<code className="cli-command">
+									npm install -g @abysslabs/cli
+								</code>
+								<span className="cli-copy">Run in terminal</span>
+							</div>
 
-              <div className="cli-alternatives text-sm text-gray-500 mt-4">
-                Also available via <code>bun</code>, <code>pnpm</code>, and <code>homebrew</code>
-              </div>
-            </div>
+							<div className="cli-alternatives text-sm text-gray-500 mt-4">
+								Also available via <code>bun</code>, <code>pnpm</code>, and{' '}
+								<code>homebrew</code>
+							</div>
+						</div>
 
-            {/* Desktop App Card - Secondary */}
-            <div className="download-card">
-              <div className="card-badge secondary">Preview</div>
-              <div className="os-icon">🍎</div>
-              <h2>macOS Desktop</h2>
-              <p className="version">Native Preview</p>
-              <p className="requirements">Requires macOS Big Sur (11) or later</p>
-              <div className="flex flex-col gap-2">
-                <a href="#" className="btn btn-secondary download-btn">
-                  Download for Intel
-                </a>
-                <a href="#" className="btn btn-secondary download-btn">
-                  Download for Apple Silicon
-                </a>
-              </div>
-              <p className="text-xs text-gray-600 mt-4">
-                Windows & Linux desktop apps coming in Q3 2026
-              </p>
-            </div>
-          </div>
+						{/* Desktop App Card - Secondary */}
+						<div className="download-card">
+							<div className="card-badge secondary">Preview</div>
+							<div className="os-icon">🍎</div>
+							<h2>macOS Desktop</h2>
+							<p className="version">Native Preview</p>
+							<p className="requirements">
+								Requires macOS Big Sur (11) or later
+							</p>
+							<div className="flex flex-col gap-2">
+								<a href="#" className="btn btn-secondary download-btn">
+									Download for Intel
+								</a>
+								<a href="#" className="btn btn-secondary download-btn">
+									Download for Apple Silicon
+								</a>
+							</div>
+							<p className="text-xs text-gray-600 mt-4">
+								Windows & Linux desktop apps coming in Q3 2026
+							</p>
+						</div>
+					</div>
 
-          <div className="install-instructions">
-            <h3>Next Steps</h3>
-            <ol>
-              <li>
-                Run <code>voidflux start</code> to launch the local GUI server
-              </li>
-              <li>
-                Open <code>http://localhost:4567</code> in your browser
-              </li>
-              <li>Create your first request collection</li>
-            </ol>
-          </div>
-        </div>
-      </section>
+					<div className="install-instructions">
+						<h3>Next Steps</h3>
+						<ol>
+							<li>
+								Run <code>abyss dev</code> to launch the local GUI server
+							</li>
+							<li>
+								Open <code>http://localhost:4567</code> in your browser
+							</li>
+							<li>Create your first request collection</li>
+						</ol>
+					</div>
+				</div>
+			</section>
 
-      <style>{`
+			<style>{`
         .download-page {
           padding-top: 64px;
         }
@@ -224,6 +231,6 @@ function DownloadPage() {
           color: var(--color-neon-cyan);
         }
       `}</style>
-    </div>
-  );
+		</div>
+	);
 }

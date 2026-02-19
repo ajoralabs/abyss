@@ -6,14 +6,14 @@ import { updateConfig, loadConfig } from '../config';
 export default defineCommand({
 	meta: {
 		name: 'login',
-		description: 'Authenticate with VoidFlux Cloud',
+		description: 'Authenticate with Abyss Cloud',
 	},
 	async run() {
 		const config = loadConfig();
 		if (config?.token) {
 			console.log(
 				chalk.yellow(
-					'You are already logged in. Run `voidflux logout` to sign out.',
+					'You are already logged in. Run `abyss logout` to sign out.',
 				),
 			);
 			return;

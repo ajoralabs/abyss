@@ -1,13 +1,13 @@
-# VoidFlux CLI
+# Abyss CLI
 
-VoidFlux CLI is a versatile API development tool that serves both as a local proxy server and a static asset server for the VoidFlux GUI. It empowers you to interact with local and remote APIs safely and securely from a modern web interface.
+Abyss CLI is a versatile API development tool that serves both as a local proxy server and a static asset server for the Abyss GUI. It empowers you to interact with local and remote APIs safely and securely from a modern web interface.
 
 ## ✨ Key Features
 
 - **🚀 Instant API Exploration**: Acts as a proxy, bypassing CORS restrictions and allowing you to test any endpoint (including `http://localhost`).
 - **🛡 Secure**: Runs locally on your machine, keeping your credentials and requests private.
 - **⚡️ Fast & Simple**: Written in TypeScript/Bun, designed for speed and simplicity. No complex configuration required.
-- **🖥 Interactive GUI**: Serves the VoidFlux GUI (React app) directly from the CLI. Just run `voidflux` and open your browser.
+- **🖥 Interactive GUI**: Serves the Abyss GUI (React app) directly from the CLI. Just run `abyss` and open your browser.
 - **🚪 Tunneling (Coming Soon)**: Expose your local servers to the internet with secure tunneling.
 
 ## 🛠 Tech Stack
@@ -26,31 +26,25 @@ VoidFlux CLI is a versatile API development tool that serves both as a local pro
 
 ```bash
 # Global installation (recommended)
-npm install -g @voidflux/cli
+npm install -g @abysslabs/cli
 # OR
-bun add -g @voidflux/cli
-
-# Run the CLI
-voidflux
+bun add -g @abysslabs/cli
 ```
 
-Wait for the output:
+### Usage
+
+```bash
+abyss dev
 ```
-✔ Interface Active at http://localhost:4567
-✔ Visual Interface Launched
-```
+
+The GUI will open automatically at `http://localhost:4567`.
 
 ### Development
 
-To start the CLI in development mode (watcher enabled):
-
-```bash
-cd apps/cli
-bun install
-bun run dev
-```
-
-The server will start on port `4567` by default.
+1. **Clone the Repo**
+2. **Install Dependencies**: `bun install`
+3. **Build GUI**: `bun run build:gui`
+4. **Run CLI in Dev**: `bun run dev`
 
 ### Configuration
 

@@ -1,11 +1,11 @@
 {
-	"name": "@voidflux/gui",
+	"name": "@abysslabs/gui",
 	"private": true,
 	"version": "0.0.1",
 	"author": "Ajora Labs",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ajoralabs/voidflux.git",
+		"url": "https://github.com/ajoralabs/abyss.git",
 		"directory": "apps/gui"
 	},
 	"type": "module",

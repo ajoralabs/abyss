@@ -1,12 +1,12 @@
 {
-  "name": "@voidflux/core",
-  "version": "0.0.1",
-  "private": true,
-  "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
-  "scripts": {
-    "lint": "biome check",
-    "build": "echo 'no build step — consumed as TS source'"
-  }
+	"name": "@abysslabs/core",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"scripts": {
+		"lint": "biome check",
+		"build": "echo 'no build step — consumed as TS source'"
+	}
 }

@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ArrowRight, Code2, Globe, Activity } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 
 gsap.registerPlugin(useGSAP);
 
@@ -84,7 +85,7 @@ export const Hero = () => {
 			<div className="absolute inset-0 z-0 pointer-events-none">
 				<img
 					src="/branding/hero-bg.png"
-					alt="VoidFlux Atmosphere"
+					alt="Abyss Atmosphere"
 					className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen"
 				/>
 				<div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-neon-cyan/5 blur-[120px] animate-pulse-slow" />
@@ -99,7 +100,7 @@ export const Hero = () => {
 						ref={titleRef}
 						className="text-[10vw] lg:text-[7vw] leading-[0.9] font-bold tracking-tighter text-white mb-8 select-none"
 					>
-						{'VOIDFLUX'.split('').map((char, i) => (
+						{'ABYSS'.split('').map((char, i) => (
 							// biome-ignore lint/suspicious/noArrayIndexKey: Splitting text requires index keys
 							<span key={`${char}-${i}`} className="char inline-block">
 								{char}
@@ -118,34 +119,42 @@ export const Hero = () => {
 							Tunneling (Coming Soon).
 						</span>{' '}
 						<span className="text-electric-violet/80 font-medium">
-							@voidflux/sdk (Coming Soon).
+							@abysslabs/sdk (Coming Soon).
 						</span>
 					</p>
 					<div className="hero-actions flex flex-col items-start gap-8">
-						<button
-							type="button"
-							className="group relative px-8 py-4 bg-white text-black font-bold text-lg rounded-none hover:bg-neon-cyan transition-colors flex items-center gap-4 overflow-hidden clip-path-slant"
-						>
-							<span className="relative z-10">Start Testing Free</span>
-							<ArrowRight className="relative z-10 group-hover:translate-x-1 transition-transform" />
-							<div className="absolute inset-0 bg-neon-cyan translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-						</button>
+						<div className="flex gap-4 items-center">
+							<Link
+								to="/docs"
+								className="group relative px-8 py-4 bg-white text-black font-bold text-lg rounded-none hover:bg-neon-cyan transition-colors flex items-center gap-4 overflow-hidden clip-path-slant"
+							>
+								<span className="relative z-10">Get Started</span>
+								<ArrowRight className="relative z-10 group-hover:translate-x-1 transition-transform" />
+								<div className="absolute inset-0 bg-neon-cyan translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+							</Link>
 
-						{/* Quick Install */}
-						<div className="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded font-mono text-sm text-gray-400">
-							<span className="text-neon-cyan">$</span>
-							<span>npm i -g @voidflux/cli</span>
-							<div className="w-1.5 h-4 bg-gray-500 animate-pulse" />
+							<a
+								href="https://github.com/ajoralabs/abyss"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="flex items-center"
+							>
+								<img
+									src="https://img.shields.io/github/stars/ajoralabs/abyss?style=social&label=Star&color=1a1b26"
+									alt="GitHub stars"
+									className="h-7"
+								/>
+							</a>
 						</div>
 
 						{/* Platform Availability */}
 						<div className="flex items-center gap-6 text-gray-500 font-mono text-sm">
 							<div
 								className="flex items-center gap-2 platform-icon hover:text-white transition-colors cursor-help"
-								title="VoidFlux SDK — Coming Soon"
+								title="Abyss SDK — Coming Soon"
 							>
 								<Code2 size={18} />
-								<span>@voidflux/sdk</span>
+								<span>@abysslabs/sdk</span>
 							</div>
 						</div>
 					</div>
@@ -167,7 +176,7 @@ export const Hero = () => {
 									<div className="w-3 h-3 rounded-full bg-green-500/50" />
 								</div>
 								<div className="flex-1 text-center font-mono text-xs text-gray-500">
-									api.voidflux.dev
+									api.abyss.dev
 								</div>
 							</div>
 

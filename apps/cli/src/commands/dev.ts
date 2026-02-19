@@ -11,7 +11,7 @@ import pkg from '../../package.json';
 export default defineCommand({
 	meta: {
 		name: 'dev',
-		description: 'Start VoidFlux (GUI + Proxy)',
+		description: 'Start Abyss (GUI + Proxy)',
 	},
 	args: {
 		port: {

@@ -1,6 +1,6 @@
-# VoidFlux GUI Roadmap
+# Abyss GUI Roadmap
 
-This document triggers the development milestones for the VoidFlux GUI application, intended to be a robust, local-first API client.
+This document triggers the development milestones for the Abyss GUI application, intended to be a robust, local-first API client.
 
 ## 🚀 Phase 1: Core Functionality (Current Status: In Progress)
 

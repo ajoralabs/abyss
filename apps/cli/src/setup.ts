@@ -4,22 +4,22 @@ import { existsSync, writeFileSync, readFileSync } from 'node:fs';
 import prompts from 'prompts';
 import chalk from 'chalk';
 
-const CONFIG_PATH = join(homedir(), '.voidfluxrc');
+const CONFIG_PATH = join(homedir(), '.abyssrc');
 
-interface VoidfluxConfig {
+interface AbyssConfig {
 	mode: 'local' | 'cloud';
 	onboarded: boolean;
 }
 
-export async function runSetup(): Promise<VoidfluxConfig> {
+export async function runSetup(): Promise<AbyssConfig> {
 	// Check if config exists
 	if (existsSync(CONFIG_PATH)) {
 		try {
 			const content = readFileSync(CONFIG_PATH, 'utf-8');
 			const config = JSON.parse(content);
 			// Simple validation
-			if (config && config.mode) {
-				return config as VoidfluxConfig;
+			if (config?.mode) {
+				return config as AbyssConfig;
 			}
 		} catch {
 			// Invalid config, ignore and re-run setup
@@ -28,13 +28,13 @@ export async function runSetup(): Promise<VoidfluxConfig> {
 
 	// Interactive Setup
 	console.log(
-		chalk.cyan.bold("\n✨ Welcome to VoidFlux! Let's get you set up.\n"),
+		chalk.cyan.bold("\n✨ Welcome to Abyss! Let's get you set up.\n"),
 	);
 
 	const response = await prompts({
 		type: 'select',
 		name: 'mode',
-		message: 'How would you like to use VoidFlux?',
+		message: 'How would you like to use Abyss?',
 		choices: [
 			{
 				title: 'Local First (Offline, Private)',
@@ -69,14 +69,14 @@ export async function runSetup(): Promise<VoidfluxConfig> {
 		);
 	}
 
-	const config: VoidfluxConfig = {
+	const config: AbyssConfig = {
 		mode: response.mode,
 		onboarded: true,
 	};
 
 	try {
 		writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
-		// console.log(chalk.dim('Configuration saved to ~/.voidfluxrc'));
+		// console.log(chalk.dim('Configuration saved to ~/.abyssrc'));
 	} catch (err) {
 		console.warn(chalk.red('Failed to save configuration.'), err);
 	}
